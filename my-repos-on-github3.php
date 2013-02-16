@@ -1,24 +1,17 @@
 <?php
 
-/*
- * You can uses http://github.com/api/v2/json/repos/show/schacon?page=2
- * used: https://api.github.com/users/login/repos?sort=created
- */
-//deprecated path
-//$url = "http://github.com/api/v1/json/thinkphp";
-//use it
-$url = "https://api.github.com/users/thinkphp/repos?sort=created";
-        
-$output = get($url);
+if(isset($_GET['user'])) {
+  $username = $_GET['user'];
+} else {
+  $username = 'thinkphp'; 
+}
 
+include 'repos.json.php';
+
+//decode the json
 $data = json_decode($output);
 
-//$repos = $data->user->repositories;
-
 $repos = $data;
-
-//for dubug
-//print_r($repos);
 
 $output = '';
 
@@ -29,24 +22,12 @@ foreach($repos as $name) {
      $output .= "<a href='$repo_url' title='$repo_desc'>$repo_name</a>  ";
 }
 
-function get($url) {
-    $ch = curl_init();
-    curl_setopt($ch,CURLOPT_URL,$url);
-    curl_setopt($ch, CURLOPT_SSLVERSION,3);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2); 
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-    curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,2);
-    $data = curl_exec($ch);
-    curl_close($ch); 
-    if(empty($data)) {return 'server timeout';}
-                 else {return $data;}
-}
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-   <title>GitHub Repos</title>
+   <title>GitHub Repositories</title>
    <link rel="stylesheet" href="http://yui.yahooapis.com/2.8.0r4/build/reset-fonts-grids/reset-fonts-grids.css" type="text/css">
    <link rel="stylesheet" href="http://yui.yahooapis.com/2.7.0/build/base/base.css" type="text/css">
 
@@ -96,7 +77,7 @@ function get($url) {
 </head>
 <body>
 <div id="doc" class="yui-t7">
-   <div id="hd" role="banner"><h1>GitHub Repos</h1></div>
+   <div id="hd" role="banner"><h1>GitHub Repositories</h1></div>
    <div id="bd" role="main">
 	<div class="cpojer-links">
             <?php echo$output; ?>
