@@ -1,15 +1,40 @@
  <?php
  $username = 'thinkphp';
- $url = "http://query.yahooapis.com/v1/public/yql?q=select%20repository.name%2Crepository.url%2Crepository.description%20from%20github.user.repos%20where%20id%3D'thinkphp'&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
- $data = json_decode(get($url));
- $repos = $data->query->results->repositories;
+
+//get time
+$oldtime = microtime(true);
+
+//your YQL statement
+$yql = 'select * from json where url="http://thinkphp.ro/apps/php-hacks/forge-php-yql/github.repos.json.php"';
+
+//start the URL by defining the API endpoint and encoding the query
+$endpoint = 'http://query.yahooapis.com/v1/public/yql?q=';
+
+$url = $endpoint . urlencode($yql);
+
+//diagnostics - remove it if you don't need them
+//$url .= '&diagnostics=true';
+
+//format - (xml or JSON)
+$url .= '&format=json';
+
+$data = json_decode(get($url));
+
+$repos = $data->query->results->json->json;
+
  $output = '';
+
  foreach($repos as $name) {
-     $repo_name = $name->repository->name;
-     $repo_url = $name->repository->url;
-     $repo_desc = $name->repository->description;
+
+     $repo_name = $name->name;
+
+     $repo_url = $name->url;
+
+     $repo_desc = $name->description;
+
      $output .= "<a href='$repo_url' title='$repo_desc'>$repo_name</a>  ";
  }
+
  //function that uses cURL to load a resouce.
  function get($url) {
           $ch = curl_init();
@@ -28,8 +53,10 @@
 <html>
 <head>
    <title>GitHub Repos</title>
+<!--
    <link rel="stylesheet" href="http://yui.yahooapis.com/2.8.0r4/build/reset-fonts-grids/reset-fonts-grids.css" type="text/css">
    <link rel="stylesheet" href="http://yui.yahooapis.com/2.7.0/build/base/base.css" type="text/css">
+-->
    <style type="text/css">   
                 .cpojer-links{ font-size:14px; }
 		.cpojer-links a	{
