@@ -53,10 +53,8 @@ $repos = $data->query->results->json->json;
 <html>
 <head>
    <title>GitHub Repos</title>
-<!--
    <link rel="stylesheet" href="http://yui.yahooapis.com/2.8.0r4/build/reset-fonts-grids/reset-fonts-grids.css" type="text/css">
    <link rel="stylesheet" href="http://yui.yahooapis.com/2.7.0/build/base/base.css" type="text/css">
--->
    <style type="text/css">   
                 .cpojer-links{ font-size:14px; }
 		.cpojer-links a	{
